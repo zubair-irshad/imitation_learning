@@ -1,0 +1,19 @@
+<launch>
+
+   <!-- launch my c++ node to publish joint states and base tf -->
+
+   <node name="ks_publisher" pkg="krang_simplified" type="robot_publisher.py" output="screen" >
+   </node>
+
+   <!-- launch robot_state_publisher to subscribe to joint_state_messages and publish /tf  -->
+   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+
+   <!-- load robot description into parameter server -->
+   <param name="robot_description" command="$(find xacro)/xacro $(find krang_simplified)/WIP_3dof_description/urdf/3dof.xacro" />
+
+   <node pkg="tf" type="static_transform_publisher" name="map2world" 
+    args="0 0 0 0 0 0 1 /map /world 100" />
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find krang_simplified)/rviz/edumip_my_robot.rviz --fixed-frame world" required="true" />
+
+</launch>

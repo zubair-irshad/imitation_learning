@@ -1,0 +1,190 @@
+<robot name="3_dof" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:property name="wheel_separation" value="0.68" /> 
+<xacro:property name="camera_link" value="0.10" /> 
+
+<link name="3dof_body">
+
+    <visual>
+      <geometry>
+        <mesh filename="/home/zubair/dart/09-URDF/scenes/BaseLinkZUp.dae" />
+      </geometry>
+    </visual>
+
+    <inertial>
+      <mass value="2"/>
+      <inertia ixx="0.44504" ixy="0" ixz="0.0" iyy="0.46271" iyz="0.0" izz="0.094467"/>
+      <origin xyz="0 0 0.781" />
+    </inertial> 
+    
+  </link>
+
+  <link name="wheelR">
+
+    <visual>
+      <geometry>
+        <mesh filename="/home/zubair/dart/09-URDF/scenes/Base/newwheel_super_res.dae" />
+      </geometry>
+    </visual>
+
+    <collision>
+      <geometry>
+        <mesh filename="/home/zubair/dart/09-URDF/scenes/Base/newwheel_super_res.dae" />
+      </geometry>
+    </collision>
+
+      <inertial>
+        <mass value="0.5"/>
+        <inertia ixx="0.005" ixy="0" ixz="0" iyy="0.0025" iyz="0" izz="0.0025"/>
+        <origin xyz="0 0 0"/>
+      </inertial>
+
+    <soft_shape>
+	    <total_mass>0.5</total_mass>
+	    <geometry>
+	        <mesh filename="/home/zubair/dart/09-URDF/scenes/Base/newwheel_super_res.dae" />
+	    </geometry>
+		<kv>500.0</kv>
+		<ke>0.0</ke>
+		<damp>5.0</damp>
+        </soft_shape>
+
+  </link>
+
+    <link name="wheelL">
+
+    <visual>
+      <geometry>
+        <mesh filename="/home/zubair/dart/09-URDF/scenes/Base/newwheel_super_res.dae" />
+      </geometry>
+    </visual>
+
+    <collision>
+      <geometry>
+        <mesh filename="/home/zubair/dart/09-URDF/scenes/Base/newwheel_super_res.dae" />
+      </geometry>
+    </collision>
+
+      <inertial>
+        <mass value="0.5"/>
+        <inertia ixx="0.005" ixy="0" ixz="0" iyy="0.0025" iyz="0" izz="0.0025"/>
+        <origin xyz="0 0 0"/>
+      </inertial>
+
+    <soft_shape>
+	    <total_mass>0.5</total_mass>
+	    <geometry>
+	        <mesh filename="/home/zubair/dart/09-URDF/scenes/Base/newwheel_super_res.dae" />
+	    </geometry>
+		<kv>500.0</kv>
+		<ke>0.0</ke>
+		<damp>5.0</damp>
+        </soft_shape>
+
+  </link>
+
+    <link name="camera_link">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+      <box size="${camera_link} ${camera_link} ${camera_link}"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+    <box size="${camera_link} ${camera_link} ${camera_link}"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
+  <joint name="jointR" type="revolute">
+    <parent link="3dof_body"/> <child link="wheelR"/>
+    <origin xyz = "0.34 -0.00 -0.0" rpy="0 0 0" />
+    <axis xyz="-1 0 0" /> 
+    <limit effort="1000" lower="-10000000000000000" upper="10000000000000000" velocity="10000000000000000" />
+  </joint>
+
+  <joint name="jointL" type="revolute">
+    <parent link="3dof_body"/>v<child link="wheelL"/>
+    <origin xyz = "-0.34 0.00 -0.0" rpy="0 0 0" />
+    <axis xyz="-1 0 0" /> 
+    <limit effort="1000" lower="-10000000000000000" upper="10000000000000000" velocity="10000000000000000" />
+  </joint>
+
+  <joint name="camera_joint" type="fixed">
+    <axis xyz="1 0 0" />
+    <origin xyz="0 0 1.56" rpy="0 0 0"/>
+    <parent link="3dof_body"/>
+    <child link="camera_link"/>
+  </joint>
+
+  <gazebo>
+	<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+	<robotNamespace>/3dof</robotNamespace>
+	<robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+	<legacyModeNS>true</legacyModeNS>
+	</plugin>
+  </gazebo>
+
+  <gazebo>
+   <plugin name="edumip_balance_ros_gazebo_plugin" filename="libedumip_balance_ros_gazebo_plugin.so">
+   <rosDebugLevel>3</rosDebugLevel>
+   <updateRate>100</updateRate>
+   <robotBaseFrame>3dof_body</robotBaseFrame>
+   <leftJoint>jointL</leftJoint>
+   <rightJoint>jointR</rightJoint>
+   <wheelSeparation>${wheel_separation}</wheelSeparation>
+   <wheelDiameter>0.068</wheelDiameter>
+   <commandTopic>/edumip/cmd</commandTopic>
+   <stateTopic>/edumip/state</stateTopic> 
+   </plugin>
+ </gazebo>
+
+ <gazebo reference="camera_link">
+ <sensor type="camera" name="camera1">
+   <update_rate>30.0</update_rate>
+   <camera name="head">
+     <horizontal_fov>1.3962634</horizontal_fov>
+     <image>
+       <width>800</width>
+       <height>800</height>
+       <format>R8G8B8</format>
+     </image>
+     <clip>
+       <near>0.02</near>
+       <far>300</far>
+     </clip>
+     <noise>
+       <type>gaussian</type>
+       <mean>0.0</mean>
+       <stddev>0.007</stddev>
+     </noise>
+   </camera>
+   <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+     <robotNamespace>edumip</robotNamespace>
+     <alwaysOn>true</alwaysOn>
+     <updateRate>10.0</updateRate>
+     <cameraName>camera1</cameraName>
+     <imageTopicName>image_raw</imageTopicName>
+     <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+     <frameName>camera_link</frameName>
+     <hackBaseline>0.07</hackBaseline>
+     <distortionK1>0.0</distortionK1>
+     <distortionK2>0.0</distortionK2>
+     <distortionK3>0.0</distortionK3>
+     <distortionT1>0.0</distortionT1>
+     <distortionT2>0.0</distortionT2>
+   </plugin>
+ </sensor>
+</gazebo>
+
+</robot>

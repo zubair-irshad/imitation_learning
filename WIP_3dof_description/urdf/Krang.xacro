@@ -1,0 +1,129 @@
+<robot name="3_dof" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:property name="wheel_separation" value="0.68" /> 
+<xacro:property name="camera_link" value="0.10" /> 
+
+  <link name="wheelR">
+
+    <visual>
+      <geometry>
+        <mesh filename="/home/zubair/dart/09-URDF/scenes/Base/newwheel_super_res.dae" />
+      </geometry>
+    </visual>
+
+    <collision>
+      <geometry>
+        <mesh filename="/home/zubair/dart/09-URDF/scenes/Base/newwheel_super_res.dae" />
+      </geometry>
+    </collision>
+
+        <inertial>
+            <mass value="4.66"/>
+            <inertia ixx="0.102019" ixy="2.45462e-05" ixz="0.00713022" iyy="0.0832724" iyz="-0.00131733" izz="0.086493"/>
+            <origin xyz="0 0 0"/>
+      </inertial>
+
+    <soft_shape>
+	    <total_mass>4.66</total_mass>
+	    <geometry>
+	        <mesh filename="/home/zubair/dart/09-URDF/scenes/Base/newwheel_super_res.dae" />
+	    </geometry>
+		<kv>500.0</kv>
+		<ke>0.0</ke>
+		<damp>5.0</damp>
+    </soft_shape>
+
+  </link>
+
+
+    <link name="wheelL">
+
+    <visual>
+      <geometry>
+        <mesh filename="/home/zubair/dart/09-URDF/scenes/Base/newwheel_super_res.dae" />
+      </geometry>
+    </visual>
+
+    <collision>
+      <geometry>
+        <mesh filename="/home/zubair/dart/09-URDF/scenes/Base/newwheel_super_res.dae" />
+      </geometry>
+    </collision>
+
+      <inertial>
+          <mass value="4.66"/>
+          <inertia ixx="0.102019" ixy="2.45462e-05" ixz="0.00713022" iyy="0.0832724" iyz="-0.00131733" izz="0.086493"/>
+          <origin xyz="0 0 0"/>
+      </inertial>
+
+    <soft_shape>
+	    <total_mass>4.66</total_mass>
+	    <geometry>
+	        <mesh filename="/home/zubair/dart/09-URDF/scenes/Base/newwheel_super_res.dae" />
+	    </geometry>
+		<kv>500.0</kv>
+		<ke>0.0</ke>
+		<damp>5.0</damp>
+        </soft_shape>
+
+  </link>
+
+  <link name="Base">
+
+    <visual>
+      <geometry>
+        <mesh filename="/home/zubair/dart/09-URDF/scenes/base.dae" />
+      </geometry>
+    </visual>
+        <inertial>
+            <mass value="75.767"/>
+            <inertia ixx = "2.4964" ixy = "0" ixz = "0" iyy = "1.9574" iyz = "0" izz = "1.2332"/>
+            <origin xyz="-0.000628 0.001940 0.076721"/>
+            <!-- <origin xyz="-0.1 0.1 0.1"/> -->
+        </inertial>
+    
+  </link>
+
+  <link name = "Spine">
+        <inertial>
+            <mass value="14.006"/>
+            <inertia ixx = "0.46928" ixy = "0" ixz = "0.097029" iyy = "0.40243" iyz = "-0.00021089" izz = "0.19605"/>
+            <origin xyz="-0.051222 0.000345 0.080526"/>
+        </inertial>
+    <visual> <geometry> <mesh filename="/home/zubair/dart/09-URDF/scenes/spine.dae" /> </geometry> </visual>
+    <collision> <origin xyz="-0.026 0.230000 0.103887"/> <geometry> <box size="0.1340 0.60000 0.14097"/> </geometry> </collision>
+  </link>
+
+
+  <joint name="jointR" type="revolute">
+    <parent link="Base"/> <child link="wheelR"/>
+    <origin xyz = "0.361 0.00 -0.0" rpy="0 0 0" />
+    <axis xyz="-1 0 0" /> 
+    <limit effort="1000" lower="-10000000000000000" upper="10000000000000000" velocity="10000000000000000" />
+  </joint>
+
+  <joint name="jointL" type="revolute">
+    <parent link="Base"/>v<child link="wheelL"/>
+    <origin xyz = "-0.354 0.00 -0.0" rpy="0 0 0" />
+    <axis xyz="-1 0 0" /> 
+    <limit effort="1000" lower="-10000000000000000" upper="10000000000000000" velocity="10000000000000000" />
+  </joint>
+
+    <joint name="JWaist" type="revolute"> <parent link="Base" /> <child link="Spine" />
+    <origin xyz = "0.026 -0.091 0.499 " rpy="0 0 0" />
+    <axis xyz="-1 0 0" /> <limit effort="1000" lower="0" upper="2.7" velocity="0.1" />
+  </joint>
+
+
+  <gazebo>
+	<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+	<robotNamespace>/3dof</robotNamespace>
+	<robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+	<legacyModeNS>true</legacyModeNS>
+	</plugin>
+  </gazebo>
+
+
+
+
+</robot>

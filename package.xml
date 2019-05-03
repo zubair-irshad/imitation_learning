@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<package>
+  <name>krang_simplified</name>
+  <version>0.4.0</version>
+  <description>krang_3dof_simplified_version</description>
+  <author email="zubair.irshad@gatech.edu">Muhammad Zubair Irshad</author>
+  <maintainer email="zubair.irshad@gatech.edu">llw</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>edumip_msgs</build_depend>
+  <build_depend>tf</build_depend>
+  <build_depend>tf2</build_depend>
+  <build_depend>learning_tf2</build_depend>
+  <build_depend>tf2_ros</build_depend>
+
+  <run_depend>roscpp</run_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>edumip_msgs</run_depend>
+  <run_depend>tf</run_depend>
+  <run_depend>tf2</run_depend>
+  <run_depend>learning_tf2</run_depend>
+  <run_depend>tf2_ros</run_depend>
+
+</package>
